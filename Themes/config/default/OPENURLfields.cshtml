@@ -1,0 +1,77 @@
+﻿@inherits NBrightBuy.render.NBrightBuyRazorTokens<NBrightDNN.NBrightRazor>
+@using System.Globalization
+@using System.Linq
+@using System.Web.UI.WebControls
+@using NBrightCore
+@using NBrightDNN
+@using Nevoweb.DNN.NBrightBuy.Components
+
+@AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuy/App_LocalResources/")
+@AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuyOpenUrlRewriter/App_LocalResources/")
+
+
+@{
+    // assign Model, so we can resolve var in VS
+    var info = (NBrightInfo)Model.List.First();
+}
+
+<input id="lang" type="hidden" value="@CultureInfo.CurrentCulture" /> <!-- get the current culture and pass to the ajax server side, so it knows what language is -->
+<input id="editlang" type="hidden" value="@info.Lang" /> <!-- culture code being edited -->
+<input id="guidkey" type="hidden" value="OPENURL" /> <!-- guidkey for record, static name -->
+<input id="itemid" type="hidden" value="@info.ItemID" />
+<input id="typecode" type="hidden" value="OPENURL" /> <!-- used as selected edit itemid -->
+
+<h1>@ResourceKey("Admin.title")</h1>
+<h4>@ResourceKey("Admin.ref"): @info.GUIDKey</h4>
+<div class="col-xs-12 col-sm-12">
+    <div class="form-group">
+        <div class="col-sm-12">
+            <div class="col-sm-3">
+                @{
+                    var resxtext = @ResourceKey("Admin.name").ToString();
+                }
+                @CheckBox(info, "genxml/checkbox/chk", resxtext,"")
+            </div>
+            <div class="col-sm-3">
+                <label>@ResourceKey("Admin.name")</label>
+                @RadioButtonList(info, "genxml/radiobuttonlist/rbl","1,2,3","a,b,c", "")
+            </div>
+            <div class="col-sm-3">
+                <label>@ResourceKey("Admin.name")</label>
+                @DropDownList(info, "genxml/dropdownlist/ddl", "1,2,3", "a,b,c", "class='form-control'")
+            </div>
+            <div class="col-sm-3">
+                <label>@ResourceKey("Admin.name")</label>
+                @TextBox(info, "genxml/textbox/name", "class='form-control'")
+            </div>
+            <div class="col-sm-12">
+                <label>@ResourceKey("Admin.description")</label><img src='/Images/Flags/@(info.Lang).gif' width='16px' />
+                @TextArea(info, "genxml/lang/genxml/textbox/description", "class='form-control' rows='4' ")
+            </div>
+        </div>
+    </div>
+    <hr />
+    @{
+        var rk1 = ResourceKey("Admin.disabled").ToString();
+    }
+    <div class="form-group">
+        <div class="col-sm-12">
+            <div class="col-sm-5">
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="col-sm-5">
+                @CheckBox(info, "genxml/checkbox/disabled", rk1, "")
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <hr />
+            <div><i class="fa fa-question-circle-o" aria-hidden="true"></i> @ResourceKey("Admin.helpmsg")</div>
+        </div>
+    </div>
+
+</div>
+
+
+
+

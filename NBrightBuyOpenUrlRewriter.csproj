@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3F96B553-3FDE-4F11-B7AD-E6D45A755327}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NBright.Providers.NBrightBuyOpenUrlRewriter</RootNamespace>
+    <AssemblyName>NBrightBuy.OpenUrlRewriter</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DotNetNuke, Version=7.2.0.607, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\DotNetNuke.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetNuke.Instrumentation, Version=8.0.4.226, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\DotNetNuke.Instrumentation.dll</HintPath>
+    </Reference>
+    <Reference Include="NBrightBuy, Version=3.5.2.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\NBrightBuy.dll</HintPath>
+    </Reference>
+    <Reference Include="NBrightCore">
+      <HintPath>..\..\..\bin\NBrightCore.dll</HintPath>
+    </Reference>
+    <Reference Include="NBrightDNN">
+      <HintPath>..\..\..\bin\NBrightDNN.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RazorEngine, Version=3.7.7.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\bin\RazorEngine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Razor.3.0.0\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Componants\Interfaces\Tax.cs" />
+    <Compile Include="Componants\Interfaces\Shipping.cs" />
+    <Compile Include="Componants\Interfaces\Scheduler.cs" />
+    <Compile Include="Componants\Interfaces\Promo.cs" />
+    <Compile Include="Componants\Interfaces\Payments.cs" />
+    <Compile Include="Componants\Interfaces\Filter.cs" />
+    <Compile Include="Componants\Interfaces\EntityType.cs" />
+    <Compile Include="Componants\Interfaces\DiscountCode.cs" />
+    <Compile Include="Componants\Interfaces\Events.cs" />
+    <Compile Include="Componants\LocalUtils.cs" />
+    <Compile Include="UrlRewriter\UrlProvider.cs" />
+    <Compile Include="UrlRewriter\UrlRule.cs" />
+    <Compile Include="UrlRewriter\UrlRulesCaching.cs" />
+    <Compile Include="XmlConnector.ashx.cs">
+      <DependentUpon>XmlConnector.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Admin.ascx.cs">
+      <DependentUpon>Admin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin.ascx.designer.cs">
+      <DependentUpon>Admin.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="render\RazorTokens.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="App_LocalResources\Admin.ascx.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Themes\config\default\display.cshtml" />
+    <None Include="Themes\config\default\Admin.cshtml" />
+    <Content Include="Installation\pluginconfig.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Admin.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
+    <Content Include="Themes\config\js\NBrightBuyPlugin.js" />
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Themes\config\default\OPENURLfields.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="XmlConnector.ashx" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetFileName)" "..\..\..\..\..\bin\$(TargetFileName)"
+
+copy "$(AssemblyName).pdb" "..\..\..\..\..\bin\$(AssemblyName).pdb"
+</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
