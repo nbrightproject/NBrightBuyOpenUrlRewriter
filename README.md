@@ -1,0 +1,2 @@
+# NBrightBuyOpenUrlRewriter
+NBrightBuyOpenUrlRewriter Provider Plugin
