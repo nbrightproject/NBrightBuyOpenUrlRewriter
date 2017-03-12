@@ -333,6 +333,42 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
             DataCache.ClearCache(string.Format(UrlRuleConfigCacheKey, portalId));
         }
 
+        public static void Remove(int portalId, int dataCategoryId,string lang)
+        {
+            string cacheFolder = GetCacheFolder(portalId);
+            var filesNotDeleted = new StringBuilder();
+            int i = 0;
+            foreach (string file in Directory.GetFiles(cacheFolder, "*_" + dataCategoryId + "_" + lang + "*.*"))
+            {
+                if (!FileSystemUtils.DeleteFileWithWait(file, 100, 200))
+                {
+                    filesNotDeleted.Append(file + ";");
+                }
+                else
+                {
+                    i += 1;
+                }
+            }
+
+            var portalCacheKey = UrlRulesCaching.GeneratePortalCacheKey(portalId, null);
+            string dataCacheFileName = GetCachedOutputFileName(portalId, portalCacheKey);
+            if (!FileSystemUtils.DeleteFileWithWait(dataCacheFileName, 100, 200))
+            {
+                filesNotDeleted.Append(dataCacheFileName + ";");
+            }
+            else
+            {
+                i += 1;
+            }
+
+            if (filesNotDeleted.Length > 0)
+            {
+                throw new IOException("Deleted " + i + " files, however, some files are locked.  Could not delete the following files: " + filesNotDeleted);
+            }
+
+            DataCache.ClearCache(string.Format(UrlRuleConfigCacheKey, portalId));
+        }
+
         #endregion
 
 
