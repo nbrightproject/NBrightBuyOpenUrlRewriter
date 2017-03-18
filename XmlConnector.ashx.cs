@@ -142,7 +142,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                 obj = objCtrl.Get(itemId);
             }
             var objData = objCtrl.GetData(obj.ItemID, typeCode + "LANG", editlang);
-            strOut = NBrightBuyUtils.RazorTemplRender(typeCode.ToLower() + "fields.cshtml", Convert.ToInt32(moduleid), _lang + guidkey + editlang, objData, templateControl, "config", editlang, StoreSettings.Current.Settings());
+            //strOut = NBrightBuyUtils.RazorTemplRender(typeCode.ToLower() + "fields.cshtml", Convert.ToInt32(moduleid), _lang + guidkey + editlang, objData, templateControl, "config", editlang, StoreSettings.Current.Settings());
 
             return strOut;
 

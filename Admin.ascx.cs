@@ -64,10 +64,10 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
         private void RazorPageLoad()
         {
             // get data record with language                
-            var strOut = NBrightBuyUtils.RazorTemplRender("Admin.cshtml", 0, "", null, ControlPath, "config", Utils.GetCurrentCulture(), StoreSettings.Current.Settings());
-            var lit = new Literal();
-            lit.Text = strOut;
-            phData.Controls.Add(lit);
+            //var strOut = NBrightBuyUtils.RazorTemplRender("Admin.cshtml", 0, "", null, ControlPath, "config", Utils.GetCurrentCulture(), StoreSettings.Current.Settings());
+            //var lit = new Literal();
+            //lit.Text = strOut;
+            //phData.Controls.Add(lit);
         }
 
         #endregion

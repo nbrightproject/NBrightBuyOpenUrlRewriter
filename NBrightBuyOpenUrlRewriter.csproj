@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NBright.Providers.NBrightBuyOpenUrlRewriter</RootNamespace>
     <AssemblyName>NBrightBuy.OpenUrlRewriter</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -57,17 +57,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\bin\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="RazorEngine, Version=3.7.7.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\bin\RazorEngine.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.AspNet.Razor.3.0.0\lib\net45\System.Web.Razor.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -75,14 +67,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Componants\Interfaces\Tax.cs" />
-    <Compile Include="Componants\Interfaces\Shipping.cs" />
-    <Compile Include="Componants\Interfaces\Scheduler.cs" />
-    <Compile Include="Componants\Interfaces\Promo.cs" />
-    <Compile Include="Componants\Interfaces\Payments.cs" />
-    <Compile Include="Componants\Interfaces\Filter.cs" />
-    <Compile Include="Componants\Interfaces\EntityType.cs" />
-    <Compile Include="Componants\Interfaces\DiscountCode.cs" />
     <Compile Include="Componants\Interfaces\Events.cs" />
     <Compile Include="Componants\LocalUtils.cs" />
     <Compile Include="UrlRewriter\UrlProvider.cs" />
@@ -99,7 +83,6 @@
     <Compile Include="Admin.ascx.designer.cs">
       <DependentUpon>Admin.ascx.cs</DependentUpon>
     </Compile>
-    <Compile Include="render\RazorTokens.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="App_LocalResources\Admin.ascx.resx" />
@@ -122,7 +105,9 @@
   <ItemGroup>
     <None Include="XmlConnector.ashx" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="render\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetFileName)" "..\..\..\..\..\bin\$(TargetFileName)"

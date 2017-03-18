@@ -76,142 +76,152 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
 
                         foreach (var catData in catitems)
                         {
-                            var catCacheKey = portalCacheKey + "_" + catData.ItemID + "_" + cultureCode;
-                            List<UrlRule> categoryRules = UrlRulesCaching.GetCache(portalId, catCacheKey, purgeResult.ValidCacheItems);
-                            if (categoryRules != null)
+                            var catDataLang = objCtrl.GetDataLang(catData.ItemID, cultureCode);
+                            if (catDataLang != null)
                             {
-                                rules.AddRange(categoryRules);
-                            }
-                            else
-                            {
-
-                                var category = new CategoryData(catData.ItemID, cultureCode);
-
-                                catrules = new List<UrlRule>();
-
-                                string url = grpCatCtrl.GetBreadCrumb(category.CategoryId, 0, "-", false);
-                                if (string.IsNullOrEmpty(url)) url = category.SEOName;
-                                if (string.IsNullOrEmpty(url))
-                                    url = category.DataLangRecord.GetXmlProperty("genxml/textbox/txtcategoryname");
-                                if (!string.IsNullOrEmpty(url))
+                                var catCacheKey = portalCacheKey + "_" + catData.ItemID + "_" + cultureCode;
+                                List<UrlRule> categoryRules = UrlRulesCaching.GetCache(portalId, catCacheKey, purgeResult.ValidCacheItems);
+                                if (categoryRules != null)
                                 {
-                                    // ------- Category URL ---------------
+                                    rules.AddRange(categoryRules);
+                                }
+                                else
+                                {
 
-                                    url = NBrightCore.common.Utils.UrlFriendly(url);
-                                    var rule = new UrlRule
+                                    //var category = new CategoryData(catData.ItemID, cultureCode);
+
+                                    catrules = new List<UrlRule>();
+
+                                    var caturlname = catDataLang.GUIDKey;
+                                    var SEOName = catDataLang.GetXmlProperty("genxml/textbox/txtseoname");
+                                    var categoryName = catDataLang.GetXmlProperty("genxml/textbox/txtcategoryname");
+
+                                    //string url = grpCatCtrl.GetBreadCrumb(catData.ItemID, 0, "-", false);
+                                    var url = caturlname;
+                                    if (string.IsNullOrEmpty(url)) url = SEOName;
+                                    if (string.IsNullOrEmpty(url)) url = categoryName;
+                                    if (!string.IsNullOrEmpty(url))
                                     {
-                                        CultureCode = ruleCultureCode,
-                                        TabId = StoreSettings.Current.ProductListTabId,
-                                        Parameters = "catid=" + category.CategoryId,
-                                        Url = url
-                                    };
-                                    var reducedRules =
-                                        rules.Where(r => r.CultureCode == rule.CultureCode && r.TabId == rule.TabId)
-                                            .ToList();
-                                    bool ruleExist = reducedRules.Any(r => r.Parameters == rule.Parameters);
-                                    if (!ruleExist)
-                                    {
-                                        if (reducedRules.Any(r => r.Url == rule.Url)) // if duplicate url
+                                        // ------- Category URL ---------------
+
+                                        url = NBrightCore.common.Utils.UrlFriendly(url);
+                                        var rule = new UrlRule
                                         {
-                                            rule.Url = category.CategoryId + "-" + url;
+                                            CultureCode = ruleCultureCode,
+                                            TabId = StoreSettings.Current.ProductListTabId,
+                                            Parameters = "catref=" + caturlname,
+                                            Url = url
+                                        };
+                                        var reducedRules =
+                                            rules.Where(r => r.CultureCode == rule.CultureCode && r.TabId == rule.TabId)
+                                                .ToList();
+                                        bool ruleExist = reducedRules.Any(r => r.Parameters == rule.Parameters);
+                                        if (!ruleExist)
+                                        {
+                                            if (reducedRules.Any(r => r.Url == rule.Url)) // if duplicate url
+                                            {
+                                                rule.Url = catData.ItemID + "-" + url;
+                                            }
+                                            rules.Add(rule);
+                                            catrules.Add(rule);
                                         }
-                                        rules.Add(rule);
-                                        catrules.Add(rule);
-                                    }
 
-                                    var proditems = category.GetAllArticles();
+                                        var proditems = objCtrl.GetList(catData.PortalId, -1, "CATXREF", " and NB1.XRefItemId = " + catData.ItemID.ToString(""));
+                                        var l2 = objCtrl.GetList(catData.PortalId, -1, "CATCASCADE", " and NB1.XRefItemId = " + catData.ItemID.ToString(""));
+                                        proditems.AddRange(l2);
 
-                                    var pageurl = "";
-                                    var pageurl1 = rule.Url;
-                                    // do paging for category (on all product modules.)
-                                    foreach (var module in modules)
-                                    {
-                                        // ------- Paging URL ---------------
-                                        var modsetting = NBrightBuyUtils.GetSettings(portalId, module.ModuleID);
-                                        var pagesize = modsetting.GetXmlPropertyInt("genxml/textbox/pagesize");
-                                        var staticlist = modsetting.GetXmlPropertyBool("genxml/checkbox/staticlist");
-                                        var defaultcatid =
-                                            modsetting.GetXmlPropertyBool("genxml/dropdownlist/defaultpropertyid");
-                                        var defaultpropertyid =
-                                            modsetting.GetXmlPropertyBool("genxml/dropdownlist/defaultcatid");
-                                        if (pagesize > 0)
+                                        var pageurl = "";
+                                        var pageurl1 = rule.Url;
+                                        // do paging for category (on all product modules.)
+                                        foreach (var module in modules)
                                         {
-                                            if (module.TabID != StoreSettings.Current.ProductListTabId || staticlist)
+                                            // ------- Paging URL ---------------
+                                            var modsetting = NBrightBuyUtils.GetSettings(portalId, module.ModuleID);
+                                            var pagesize = modsetting.GetXmlPropertyInt("genxml/textbox/pagesize");
+                                            var staticlist = modsetting.GetXmlPropertyBool("genxml/checkbox/staticlist");
+                                            var defaultcatid = modsetting.GetXmlPropertyBool("genxml/dropdownlist/defaultpropertyid");
+                                            var defaultpropertyid = modsetting.GetXmlPropertyBool("genxml/dropdownlist/defaultcatid");
+                                            if (pagesize > 0)
                                             {
-                                                // on the non-default product list tab, add the moduleid, so we dont; get duplicates.
-                                                // NOTE: this only supports defaut paging url for 1 module on the defaut product list page. Other modules will have moduleid added to the url.
-                                                pageurl = module.ModuleID + "-" + pageurl1;
-                                            }
-                                            else
-                                            {
-                                                pageurl = pageurl1;
-
-                                            }
-
-
-                                            var pagetotal = Convert.ToInt32((proditems.Count/pagesize) + 1);
-                                            for (int i = 1; i <= pagetotal; i++)
-                                            {
-                                                rule = new UrlRule
+                                                if (module.TabID != StoreSettings.Current.ProductListTabId || staticlist)
                                                 {
-                                                    CultureCode = ruleCultureCode,
-                                                    TabId = module.TabID,
-                                                    Parameters =
-                                                        "catid=" + category.CategoryId + "&page=" + i + "&pagemid=" +
-                                                        module.ModuleID,
-                                                    Url = pageurl + "-" + i
-                                                };
-                                                ruleExist = reducedRules.Any(r => r.Parameters == rule.Parameters);
-                                                if (!ruleExist)
+                                                    // on the non-default product list tab, add the moduleid, so we dont; get duplicates.
+                                                    // NOTE: this only supports defaut paging url for 1 module on the defaut product list page. Other modules will have moduleid added to the url.
+                                                    pageurl = module.ModuleID + "-" + pageurl1;
+                                                }
+                                                else
                                                 {
-                                                    if (reducedRules.Any(r => r.Url == rule.Url)) // if duplicate url
+                                                    pageurl = pageurl1;
+                                                }
+
+
+                                                var pagetotal = Convert.ToInt32((proditems.Count/pagesize) + 1);
+                                                for (int i = 1; i <= pagetotal; i++)
+                                                {
+                                                    rule = new UrlRule
                                                     {
-                                                        rule.Url = module.ModuleID + "-" + rule.Url;
+                                                        CultureCode = ruleCultureCode,
+                                                        TabId = module.TabID,
+                                                        Parameters = "catid=" + catData.ItemID + "&page=" + i + "&pagemid=" + module.ModuleID,
+                                                        Url = pageurl + "-" + i
+                                                    };
+                                                    ruleExist = reducedRules.Any(r => r.Parameters == rule.Parameters);
+                                                    if (!ruleExist)
+                                                    {
+                                                        if (reducedRules.Any(r => r.Url == rule.Url)) // if duplicate url
+                                                        {
+                                                            rule.Url = module.ModuleID + "-" + rule.Url;
+                                                        }
+                                                        rules.Add(rule);
+                                                        catrules.Add(rule);
                                                     }
-                                                    rules.Add(rule);
-                                                    catrules.Add(rule);
                                                 }
                                             }
                                         }
-                                    }
 
-                                    // ------- Product URL ---------------
-                                    foreach (var xrefData in proditems)
-                                    {
-                                        //var product = new ProductData(xrefData.ParentItemId, cultureCode, false);
-                                        var prdData = objCtrl.GetData(xrefData.ParentItemId, cultureCode);
+                                        // ------- Product URL ---------------
+                                        foreach (var xrefData in proditems)
+                                        {
+                                            //var product = new ProductData(xrefData.ParentItemId, cultureCode, false);
+                                            var prdData = objCtrl.GetData(xrefData.ParentItemId, cultureCode);
 
-                                        string produrl = prdData.GetXmlProperty("genxml/lang/genxml/textbox/txtseoname"); ;
-                                        if (string.IsNullOrEmpty(produrl)) produrl = prdData.GetXmlProperty("genxml/lang/genxml/textbox/txtproductname");
-                                        if (string.IsNullOrEmpty(produrl)) produrl = prdData.GetXmlProperty("genxml/textbox/txtproductref");
-                                        if (string.IsNullOrEmpty(produrl)) produrl = prdData.ItemID.ToString("");
-                                        if (category.SEOName != "") produrl = category.SEOName + "-" + produrl;
-                                        produrl = Utils.UrlFriendly(produrl);
-                                        var prodrule = new UrlRule
-                                        {
-                                            CultureCode = ruleCultureCode,
-                                            TabId = StoreSettings.Current.ProductDetailTabId,
-                                            Parameters = "catid=" + category.CategoryId + "&eid=" + prdData.ItemID,
-                                            Url = produrl
-                                        };
-                                        reducedRules =
-                                            rules.Where(
-                                                r => r.CultureCode == prodrule.CultureCode && r.TabId == prodrule.TabId)
-                                                .ToList();
-                                        ruleExist = reducedRules.Any(r => r.Parameters == prodrule.Parameters);
-                                        if (!ruleExist)
-                                        {
-                                            if (reducedRules.Any(r => r.Url == prodrule.Url)) // if duplicate url
+                                            var pref = prdData.GetXmlProperty("genxml/textbox/txtproductref");
+
+                                            string produrl = prdData.GetXmlProperty("genxml/lang/genxml/textbox/txtseoname");
+                                            ;
+                                            if (string.IsNullOrEmpty(produrl)) produrl = prdData.GetXmlProperty("genxml/lang/genxml/textbox/txtproductname");
+                                            if (string.IsNullOrEmpty(produrl)) produrl = pref;
+                                            if (string.IsNullOrEmpty(produrl)) produrl = prdData.ItemID.ToString("");
+                                            //if (catref != "") produrl = catref + "-" + produrl;
+                                            //if (catref != "") produrl = catref + "-" + produrl;
+                                            produrl = caturlname + "-" + produrl;
+                                            produrl = Utils.UrlFriendly(produrl);
+                                            var prodrule = new UrlRule
                                             {
-                                                prodrule.Url = prdData.ItemID + "-" + produrl;
+                                                CultureCode = ruleCultureCode,
+                                                TabId = StoreSettings.Current.ProductDetailTabId,
+                                                Parameters = "catid=" + catData.ItemID + "&eid=" + prdData.ItemID,
+                                                Url = produrl
+                                            };
+                                            reducedRules =
+                                                rules.Where(
+                                                    r => r.CultureCode == prodrule.CultureCode && r.TabId == prodrule.TabId)
+                                                    .ToList();
+                                            ruleExist = reducedRules.Any(r => r.Parameters == prodrule.Parameters);
+                                            if (!ruleExist)
+                                            {
+                                                if (reducedRules.Any(r => r.Url == prodrule.Url)) // if duplicate url
+                                                {
+                                                    prodrule.Url = prdData.ItemID + "-" + produrl;
+                                                }
+                                                rules.Add(prodrule);
+                                                catrules.Add(prodrule);
                                             }
-                                            rules.Add(prodrule);
-                                            catrules.Add(prodrule);
                                         }
-                                    }
 
+                                    }
+                                    UrlRulesCaching.SetCache(portalId, catCacheKey, new TimeSpan(1, 0, 0, 0), catrules);
                                 }
-                                UrlRulesCaching.SetCache(portalId, catCacheKey, new TimeSpan(1, 0, 0, 0), catrules);
                             }
                         }
                     }
