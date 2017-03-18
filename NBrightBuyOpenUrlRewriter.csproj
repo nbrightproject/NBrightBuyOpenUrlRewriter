@@ -105,6 +105,7 @@
     <EmbeddedResource Include="App_LocalResources\Admin.ascx.resx" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Installation\NBrightBuyOpenUrlRewriter.dnn" />
     <None Include="Themes\config\default\display.cshtml" />
     <None Include="Themes\config\default\Admin.cshtml" />
     <Content Include="Installation\pluginconfig.xml">

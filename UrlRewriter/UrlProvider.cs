@@ -178,19 +178,20 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                     // ------- Product URL ---------------
                                     foreach (var xrefData in proditems)
                                     {
-                                        var product = new ProductData(xrefData.ParentItemId, cultureCode, false);
+                                        //var product = new ProductData(xrefData.ParentItemId, cultureCode, false);
+                                        var prdData = objCtrl.GetData(xrefData.ParentItemId, cultureCode);
 
-                                        string produrl = product.SEOName;
-                                        if (string.IsNullOrEmpty(produrl)) produrl = product.ProductName;
-                                        if (string.IsNullOrEmpty(produrl)) produrl = product.ProductRef;
-                                        if (string.IsNullOrEmpty(produrl)) produrl = product.Info.ItemID.ToString();
+                                        string produrl = prdData.GetXmlProperty("genxml/lang/genxml/textbox/txtseoname"); ;
+                                        if (string.IsNullOrEmpty(produrl)) produrl = prdData.GetXmlProperty("genxml/lang/genxml/textbox/txtproductname");
+                                        if (string.IsNullOrEmpty(produrl)) produrl = prdData.GetXmlProperty("genxml/textbox/txtproductref");
+                                        if (string.IsNullOrEmpty(produrl)) produrl = prdData.ItemID.ToString("");
                                         if (category.SEOName != "") produrl = category.SEOName + "-" + produrl;
                                         produrl = Utils.UrlFriendly(produrl);
                                         var prodrule = new UrlRule
                                         {
                                             CultureCode = ruleCultureCode,
                                             TabId = StoreSettings.Current.ProductDetailTabId,
-                                            Parameters = "catid=" + category.CategoryId + "&eid=" + product.Info.ItemID,
+                                            Parameters = "catid=" + category.CategoryId + "&eid=" + prdData.ItemID,
                                             Url = produrl
                                         };
                                         reducedRules =
@@ -202,7 +203,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                         {
                                             if (reducedRules.Any(r => r.Url == prodrule.Url)) // if duplicate url
                                             {
-                                                prodrule.Url = product.Info.ItemID + "-" + produrl;
+                                                prodrule.Url = prdData.ItemID + "-" + produrl;
                                             }
                                             rules.Add(prodrule);
                                             catrules.Add(prodrule);

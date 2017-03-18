@@ -4,11 +4,11 @@
     <plugintemplate>
       <![CDATA[]]>
     </plugintemplate>
-    <index>20</index>
+    <index>99</index>
   </hidden>
   <textbox>
     <ctrl>
-      <![CDATA[NBrightBuyOpenUrlRewriter]]>
+      <![CDATA[nbrightbuyopenurlrewriter]]>
     </ctrl>
     <name>
       <![CDATA[Url Rewriter]]>
@@ -32,10 +32,10 @@
       <![CDATA[]]>
     </description>
     <assembly>
-      <![CDATA[]]>
+      <![CDATA[NBrightBuy.OpenUrlRewriter]]>
     </assembly>
     <namespaceclass>
-      <![CDATA[]]>
+      <![CDATA[NBright.Providers.NBrightBuyOpenUrlRewriter.Events]]>
     </namespaceclass>
   </textbox>
   <checkbox>
@@ -43,17 +43,14 @@
       <![CDATA[False]]>
     </hidden>
     <active>
-      <![CDATA[False]]>
+      <![CDATA[True]]>
     </active>
   </checkbox>
   <dropdownlist>
-    <providertype>
-      <![CDATA[]]>
+    <providertype selectedtext="Évènements">
+      <![CDATA[06]]>
     </providertype>
   </dropdownlist>
   <checkboxlist />
   <radiobuttonlist />
 </genxml>
-
-
-

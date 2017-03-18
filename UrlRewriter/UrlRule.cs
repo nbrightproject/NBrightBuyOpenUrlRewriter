@@ -10,5 +10,6 @@
         public bool RemoveTab { get; set; }
         public int TabId { get; set; }
         public string Url { get; set; }
+        public bool Patern { get; set; }
     }
 }

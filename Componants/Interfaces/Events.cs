@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DotNetNuke.Common.Utilities;
 using DotNetNuke.Entities.Portals;
 using DotNetNuke.Instrumentation;
 using NBrightDNN;
@@ -40,19 +41,19 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
 
         public override NBrightInfo AfterCategorySave(NBrightInfo nbrightInfo)
         {
-            //UrlRulesCaching.Remove(PortalSettings.Current.PortalId, nbrightInfo.ItemID, nbrightInfo.Lang);
+            UrlRulesCaching.Remove(PortalSettings.Current.PortalId, nbrightInfo.ItemID, nbrightInfo.Lang);
             //NBrightBuyUtils.RemoveModCachePortalWide(PortalSettings.Current.PortalId);
             return nbrightInfo;
         }
 
         public override NBrightInfo AfterProductSave(NBrightInfo nbrightInfo)
         {
-            //var prodData = new ProductData(nbrightInfo.ItemID, nbrightInfo.Lang);
+            var prodData = new ProductData(nbrightInfo.ItemID, nbrightInfo.Lang);
 
-            //foreach (var cat in prodData.GetCategories("",true))
-            //{
-            //    UrlRulesCaching.Remove(PortalSettings.Current.PortalId, cat.categoryid, nbrightInfo.Lang);
-            //}
+            foreach (var cat in prodData.GetCategories("",true))
+            {
+                UrlRulesCaching.Remove(PortalSettings.Current.PortalId, cat.categoryid, nbrightInfo.Lang);
+            }
             //NBrightBuyUtils.RemoveModCachePortalWide(PortalSettings.Current.PortalId);
             return nbrightInfo;
         }

@@ -1,0 +1,74 @@
+﻿<dotnetnuke type="Package" version="5.0">
+	<packages>
+		<package name="NBrightBuyOpenUrlRewriter" type="Module" version="1.0.0">
+			<friendlyName>NBrightBuyOpenUrlRewriter</friendlyName>
+			<description>NBrightBuyOpenUrlRewriter: OpenUrlRewriter Plugin for NBS</description>
+			<iconFile />
+			<owner>
+				<name>David Lee</name>
+				<organization>Nevoweb</organization>
+				<url>www.nevoweb.com</url>
+				<email>info@nevoweb.com</email>
+			</owner>
+			<license>
+  THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM “AS IS” WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+  YOU MAY NOT REDISTRIBUTE, NOT VIEW THE SOURCE CODE, NOT COPY THIS SOFTWARE.  
+			</license>
+			<releaseNotes>v1.0.0</releaseNotes>
+			<components>
+        
+				<component type="ResourceFile">
+					<resourceFiles>
+						<basePath>DesktopModules\NBright\NBrightBuyOpenUrlRewriter</basePath>
+						<resourceFile>
+							<name>NBrightBuyOpenUrlRewriter_Resource.zip</name>
+						</resourceFile>
+					</resourceFiles>
+				</component>
+        
+				<component type="Assembly">
+					<assemblies>
+						<assembly>
+							<path>bin</path>
+							<name>NBrightBuy.OpenUrlRewriter.dll</name>
+							<sourceFileName>NBrightBuy.OpenUrlRewriter.dll</sourceFileName>
+						</assembly>
+					</assemblies>
+				</component>
+        
+				<component type="File">
+					<files>
+						<basePath>DesktopModules\NBright\NBrightBuy\Plugins</basePath>
+						<file>
+							<path></path>
+							<name>pluginconfig.xml</name>
+							<sourceFileName>pluginconfig.xml</sourceFileName>
+						</file>
+					</files>
+				</component>
+
+        <component type="Config">
+          <config>
+            <configFile>web.config</configFile>
+            <install>
+              <configuration>
+                <nodes>
+
+                  <node path="/configuration/dotnetnuke" action="update" targetpath="/configuration/dotnetnuke/urlRule" collision="ignore">
+                    <urlRule defaultProvider="">
+                      <providers>
+                        <add name="nbs3UrlRuleProvider" type="NBright.NBSv3UrlRuleProvider.UrlRules, NBSv3UrlRuleProvider" />
+                      </providers>
+                    </urlRule>
+                  </node>
+
+                </nodes>
+              </configuration>
+            </install>
+          </config>
+        </component>
+
+      </components>
+		</package>
+	</packages>
+</dotnetnuke>
