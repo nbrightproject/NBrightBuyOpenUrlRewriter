@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NBright.Providers.NBrightBuyOpenUrlRewriter</RootNamespace>
     <AssemblyName>NBrightBuy.OpenUrlRewriter</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -43,8 +43,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\bin\DotNetNuke.Instrumentation.dll</HintPath>
     </Reference>
-    <Reference Include="NBrightBuy, Version=3.5.2.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="NBrightBuy">
       <HintPath>..\..\..\bin\NBrightBuy.dll</HintPath>
     </Reference>
     <Reference Include="NBrightCore">

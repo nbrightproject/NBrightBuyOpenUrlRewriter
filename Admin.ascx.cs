@@ -63,6 +63,11 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
 
         private void RazorPageLoad()
         {
+            UrlRulesCaching.PurgeCache(PortalId);
+            var lit = new Literal();
+            lit.Text = "<h1>URL rewriter: File Cache Cleared</h1>";
+            phData.Controls.Add(lit);
+
             // get data record with language                
             //var strOut = NBrightBuyUtils.RazorTemplRender("Admin.cshtml", 0, "", null, ControlPath, "config", Utils.GetCurrentCulture(), StoreSettings.Current.Settings());
             //var lit = new Literal();

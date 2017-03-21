@@ -5,7 +5,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Web;
+using DotNetNuke.Entities.Portals;
 using NBrightCore.common;
 using Nevoweb.DNN.NBrightBuy.Components;
 
@@ -52,7 +54,8 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
 
                 ModuleController mc = new ModuleController();
                 var modules = mc.GetModulesByDefinition(portalId, "NBS_ProductDisplay").OfType<ModuleInfo>();
-
+                var modulesOldModule = mc.GetModulesByDefinition(portalId, "NBS_ProductView").OfType<ModuleInfo>();
+                modules = modules.Concat(modulesOldModule);
 
                 // ------- Category URL ---------------
 
@@ -77,9 +80,10 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                         foreach (var catData in catitems)
                         {
                             var catDataLang = objCtrl.GetDataLang(catData.ItemID, cultureCode);
+
                             if (catDataLang != null)
                             {
-                                var catCacheKey = portalCacheKey + "_" + catData.ItemID + "_" + cultureCode;
+                                var catCacheKey = portalCacheKey + "_" + catDataLang.ItemID + "_" + cultureCode;
                                 List<UrlRule> categoryRules = UrlRulesCaching.GetCache(portalId, catCacheKey, purgeResult.ValidCacheItems);
                                 if (categoryRules != null)
                                 {
@@ -87,9 +91,6 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                 }
                                 else
                                 {
-
-                                    //var category = new CategoryData(catData.ItemID, cultureCode);
-
                                     catrules = new List<UrlRule>();
 
                                     var caturlname = catDataLang.GUIDKey;
@@ -162,7 +163,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                                     {
                                                         CultureCode = ruleCultureCode,
                                                         TabId = module.TabID,
-                                                        Parameters = "catid=" + catData.ItemID + "&page=" + i + "&pagemid=" + module.ModuleID,
+                                                        Parameters = "catref=" + caturlname + "&page=" + i + "&pagemid=" + module.ModuleID,
                                                         Url = pageurl + "-" + i
                                                     };
                                                     ruleExist = reducedRules.Any(r => r.Parameters == rule.Parameters);
@@ -200,7 +201,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                             {
                                                 CultureCode = ruleCultureCode,
                                                 TabId = StoreSettings.Current.ProductDetailTabId,
-                                                Parameters = "catid=" + catData.ItemID + "&eid=" + prdData.ItemID,
+                                                Parameters = "catref=" + catDataLang.GUIDKey + "&ref=" + prdData.GUIDKey,
                                                 Url = produrl
                                             };
                                             reducedRules =
