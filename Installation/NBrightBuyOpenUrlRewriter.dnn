@@ -54,17 +54,22 @@
               <configuration>
                 <nodes>
 
-                  <node path="/configuration/dotnetnuke" action="update" targetpath="/configuration/dotnetnuke/urlRule" collision="ignore">
-                    <urlRule defaultProvider="">
-                      <providers>
-                        <add name="nbs3UrlRuleProvider" type="NBright.NBSv3UrlRuleProvider.UrlRules, NBSv3UrlRuleProvider" />
-                      </providers>
-                    </urlRule>
+                  <node path="/configuration/dotnetnuke/urlRule/providers" action="update" key="name" collision="ignore">
+                    <add name="nbs3UrlRuleProvider" type="NBright.NBSv3UrlRuleProvider.UrlRules, NBSv3UrlRuleProvider" includePageName="true" />
                   </node>
 
                 </nodes>
               </configuration>
             </install>
+
+            <uninstall>
+              <configuration>
+                <nodes>
+                  <node path="/configuration/dotnetnuke/urlRule/providers/add[@name='nbs3UrlRuleProvider']" action="remove" />
+                </nodes>
+              </configuration>
+            </uninstall>
+
           </config>
         </component>
 
