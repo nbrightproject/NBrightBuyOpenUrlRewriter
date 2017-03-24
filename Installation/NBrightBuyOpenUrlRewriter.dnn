@@ -33,6 +33,11 @@
 							<name>NBrightBuy.OpenUrlRewriter.dll</name>
 							<sourceFileName>NBrightBuy.OpenUrlRewriter.dll</sourceFileName>
 						</assembly>
+						<assembly>
+							<path>bin</path>
+							<name>NBSv3UrlRuleProvider.dll</name>
+							<sourceFileName>NBSv3UrlRuleProvider.dll</sourceFileName>
+						</assembly>
 					</assemblies>
 				</component>
         
