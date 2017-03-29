@@ -81,7 +81,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                         {
                             var catDataLang = objCtrl.GetDataLang(catData.ItemID, cultureCode);
 
-                            if (catDataLang != null)
+                            if (catDataLang != null && !catData.GetXmlPropertyBool("genxml/checkbox/chkishidden"))
                             {
                                 var catCacheKey = portalCacheKey + "_" + catDataLang.ItemID + "_" + cultureCode;
                                 List<UrlRule> categoryRules = UrlRulesCaching.GetCache(portalId, catCacheKey, purgeResult.ValidCacheItems);
@@ -148,33 +148,36 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                                 {
                                                     // on the non-default product list tab, add the moduleid, so we dont; get duplicates.
                                                     // NOTE: this only supports defaut paging url for 1 module on the defaut product list page. Other modules will have moduleid added to the url.
-                                                    pageurl = module.ModuleID + "-" + pageurl1;
+
+                                                    //pageurl = module.ModuleID + "-" + pageurl1;
+
+                                                    //IGNORE NON DEFAULT MODULES.
                                                 }
                                                 else
                                                 {
                                                     pageurl = pageurl1;
-                                                }
 
 
-                                                var pagetotal = Convert.ToInt32((proditems.Count/pagesize) + 1);
-                                                for (int i = 1; i <= pagetotal; i++)
-                                                {
-                                                    rule = new UrlRule
+                                                    var pagetotal = Convert.ToInt32((proditems.Count/pagesize) + 1);
+                                                    for (int i = 1; i <= pagetotal; i++)
                                                     {
-                                                        CultureCode = ruleCultureCode,
-                                                        TabId = module.TabID,
-                                                        Parameters = "catref=" + caturlname + "&page=" + i + "&pagemid=" + module.ModuleID,
-                                                        Url = pageurl + "-" + i
-                                                    };
-                                                    ruleExist = reducedRules.Any(r => r.Parameters == rule.Parameters);
-                                                    if (!ruleExist)
-                                                    {
-                                                        if (reducedRules.Any(r => r.Url == rule.Url)) // if duplicate url
+                                                        rule = new UrlRule
                                                         {
-                                                            rule.Url = module.ModuleID + "-" + rule.Url;
+                                                            CultureCode = ruleCultureCode,
+                                                            TabId = module.TabID,
+                                                            Parameters = "catref=" + caturlname + "&page=" + i + "&pagemid=" + module.ModuleID,
+                                                            Url = pageurl + "-" + i
+                                                        };
+                                                        ruleExist = reducedRules.Any(r => r.Parameters == rule.Parameters);
+                                                        if (!ruleExist)
+                                                        {
+                                                            if (reducedRules.Any(r => r.Url == rule.Url)) // if duplicate url
+                                                            {
+                                                                rule.Url = module.ModuleID + "-" + rule.Url;
+                                                            }
+                                                            rules.Add(rule);
+                                                            catrules.Add(rule);
                                                         }
-                                                        rules.Add(rule);
-                                                        catrules.Add(rule);
                                                     }
                                                 }
                                             }
