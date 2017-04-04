@@ -37,7 +37,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                     var purgeResult = UrlRulesCaching.PurgeExpiredItems(portalId);
                     var portalCacheKey = UrlRulesCaching.GeneratePortalCacheKey(portalId, null);
                     var portalRules = UrlRulesCaching.GetCache(portalId, portalCacheKey, purgeResult.ValidCacheItems);
-                    if (portalRules != null)
+                    if (portalRules != null && portalRules.Count > 0)
                     {
                         #if DEBUG
                             stopwatch.Stop();
@@ -85,7 +85,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                             {
                                 var catCacheKey = portalCacheKey + "_" + catDataLang.ItemID + "_" + cultureCode;
                                 List<UrlRule> categoryRules = UrlRulesCaching.GetCache(portalId, catCacheKey, purgeResult.ValidCacheItems);
-                                if (categoryRules != null)
+                                if (categoryRules != null && categoryRules.Count > 0)
                                 {
                                     rules.AddRange(categoryRules);
                                 }
