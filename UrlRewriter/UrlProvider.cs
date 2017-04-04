@@ -85,7 +85,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                             {
                                 var catCacheKey = portalCacheKey + "_" + catDataLang.ItemID + "_" + cultureCode;
                                 List<UrlRule> categoryRules = UrlRulesCaching.GetCache(portalId, catCacheKey, purgeResult.ValidCacheItems);
-                                if (categoryRules != null)
+                                if (categoryRules != null && categoryRules.Count > 0)
                                 {
                                     rules.AddRange(categoryRules);
                                 }
