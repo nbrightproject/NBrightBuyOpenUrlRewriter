@@ -37,7 +37,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                     var purgeResult = UrlRulesCaching.PurgeExpiredItems(portalId);
                     var portalCacheKey = UrlRulesCaching.GeneratePortalCacheKey(portalId, null);
                     var portalRules = UrlRulesCaching.GetCache(portalId, portalCacheKey, purgeResult.ValidCacheItems);
-                    if (portalRules != null)
+                    if (portalRules != null && portalRules.Count > 0)
                     {
                         #if DEBUG
                             stopwatch.Stop();
