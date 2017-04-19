@@ -52,6 +52,8 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
 
                 var objCtrl = new NBrightBuyController();
 
+                var storesettings = new StoreSettings(portalId);
+
                 ModuleController mc = new ModuleController();
                 var modules = mc.GetModulesByDefinition(portalId, "NBS_ProductDisplay").OfType<ModuleInfo>();
                 var modulesOldModule = mc.GetModulesByDefinition(portalId, "NBS_ProductView").OfType<ModuleInfo>();
@@ -71,8 +73,6 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
 
                         string cultureCode = key.Value.Code;
                         string ruleCultureCode = (dicLocales.Count > 1 ? cultureCode : null);
-
-                        var grpCatCtrl = new GrpCatController(cultureCode);
 
                         // get all products in portal, with lang data
                         var catitems = objCtrl.GetList(portalId, -1, "CATEGORY");
@@ -109,7 +109,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                         var rule = new UrlRule
                                         {
                                             CultureCode = ruleCultureCode,
-                                            TabId = StoreSettings.Current.ProductListTabId,
+                                            TabId = storesettings.ProductListTabId,
                                             Parameters = "catref=" + caturlname,
                                             Url = url
                                         };
@@ -144,7 +144,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                             var defaultpropertyid = modsetting.GetXmlPropertyBool("genxml/dropdownlist/defaultcatid");
                                             if (pagesize > 0)
                                             {
-                                                if (module.TabID != StoreSettings.Current.ProductListTabId || staticlist)
+                                                if (module.TabID != storesettings.ProductListTabId || staticlist)
                                                 {
                                                     // on the non-default product list tab, add the moduleid, so we dont; get duplicates.
                                                     // NOTE: this only supports defaut paging url for 1 module on the defaut product list page. Other modules will have moduleid added to the url.
@@ -203,7 +203,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                             var prodrule = new UrlRule
                                             {
                                                 CultureCode = ruleCultureCode,
-                                                TabId = StoreSettings.Current.ProductDetailTabId,
+                                                TabId = storesettings.ProductDetailTabId,
                                                 Parameters = "catref=" + catDataLang.GUIDKey + "&ref=" + prdData.GUIDKey,
                                                 Url = produrl
                                             };
@@ -224,7 +224,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                         }
 
                                     }
-                                    UrlRulesCaching.SetCache(portalId, catCacheKey, new TimeSpan(1, 0, 0, 0), catrules);
+                                    UrlRulesCaching.SetCache(portalId, catCacheKey, new TimeSpan(0, 0, 0, 20), catrules);
                                 }
                             }
                         }
@@ -239,7 +239,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
             #endregion
 
 
-            UrlRulesCaching.SetCache(portalId, portalCacheKey, new TimeSpan(1, 0, 0, 0), rules);
+            UrlRulesCaching.SetCache(portalId, portalCacheKey, new TimeSpan(0, 0, 0, 20), rules);
 
 
             #if DEBUG
