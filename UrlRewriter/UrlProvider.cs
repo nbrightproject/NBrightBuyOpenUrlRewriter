@@ -34,23 +34,25 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                     stopwatch.Start();
                 #endif
 
-                    var purgeResult = UrlRulesCaching.PurgeExpiredItems(portalId);
-                    var portalCacheKey = UrlRulesCaching.GeneratePortalCacheKey(portalId, null);
-                    var portalRules = UrlRulesCaching.GetCache(portalId, portalCacheKey, purgeResult.ValidCacheItems);
-                    if (portalRules != null && portalRules.Count > 0)
-                    {
-                        #if DEBUG
-                            stopwatch.Stop();
-                            speed = stopwatch.Elapsed.Milliseconds;
-                            mess = $"PortalId: {portalId}. Time elapsed: {stopwatch.Elapsed.Milliseconds}ms. All Cached. PurgedItems: {purgeResult.PurgedItemCount}. Speed: {speed}";
-                            Logger.Error(mess);
-                        #endif
-                        return portalRules;
-                    }
+                var purgeResult = UrlRulesCaching.PurgeExpiredItems(portalId);
+                var portalCacheKey = UrlRulesCaching.GeneratePortalCacheKey(portalId, null);
+                var portalRules = UrlRulesCaching.GetCache(portalId, portalCacheKey, purgeResult.ValidCacheItems);
+                if (portalRules != null && portalRules.Count > 0)
+                {
+                    #if DEBUG
+                        stopwatch.Stop();
+                        speed = stopwatch.Elapsed.Milliseconds;
+                        mess = $"PortalId: {portalId}. Time elapsed: {stopwatch.Elapsed.Milliseconds}ms. All Cached. PurgedItems: {purgeResult.PurgedItemCount}. Speed: {speed}";
+                        Logger.Error(mess);
+                    #endif
+                    return portalRules;
+                }
 
                 Dictionary<string, Locale> dicLocales = LocaleController.Instance.GetLocales(portalId);
 
                 var objCtrl = new NBrightBuyController();
+
+                var storesettings = new StoreSettings(portalId);
 
                 ModuleController mc = new ModuleController();
                 var modules = mc.GetModulesByDefinition(portalId, "NBS_ProductDisplay").OfType<ModuleInfo>();
@@ -71,8 +73,6 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
 
                         string cultureCode = key.Value.Code;
                         string ruleCultureCode = (dicLocales.Count > 1 ? cultureCode : null);
-
-                        var grpCatCtrl = new GrpCatController(cultureCode);
 
                         // get all products in portal, with lang data
                         var catitems = objCtrl.GetList(portalId, -1, "CATEGORY");
@@ -109,7 +109,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                         var rule = new UrlRule
                                         {
                                             CultureCode = ruleCultureCode,
-                                            TabId = StoreSettings.Current.ProductListTabId,
+                                            TabId = storesettings.ProductListTabId,
                                             Parameters = "catref=" + caturlname,
                                             Url = url
                                         };
@@ -144,7 +144,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                             var defaultpropertyid = modsetting.GetXmlPropertyBool("genxml/dropdownlist/defaultcatid");
                                             if (pagesize > 0)
                                             {
-                                                if (module.TabID != StoreSettings.Current.ProductListTabId || staticlist)
+                                                if (module.TabID != storesettings.ProductListTabId || staticlist)
                                                 {
                                                     // on the non-default product list tab, add the moduleid, so we dont; get duplicates.
                                                     // NOTE: this only supports defaut paging url for 1 module on the defaut product list page. Other modules will have moduleid added to the url.
@@ -157,7 +157,8 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                                 {
                                                     pageurl = pageurl1;
 
-                                                    var pagetotal = Convert.ToInt32((proditems.Count/pagesize) + 1);
+
+                                                    var pagetotal = Convert.ToInt32((proditems.Count / pagesize) + 1);
                                                     for (int i = 1; i <= pagetotal; i++)
                                                     {
                                                         rule = new UrlRule
@@ -202,7 +203,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                             var prodrule = new UrlRule
                                             {
                                                 CultureCode = ruleCultureCode,
-                                                TabId = StoreSettings.Current.ProductDetailTabId,
+                                                TabId = storesettings.ProductDetailTabId,
                                                 Parameters = "catref=" + catDataLang.GUIDKey + "&ref=" + prdData.GUIDKey,
                                                 Url = produrl
                                             };
@@ -235,21 +236,21 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
 
                 }
 
-            #endregion
+                #endregion
 
 
-            UrlRulesCaching.SetCache(portalId, portalCacheKey, new TimeSpan(1, 0, 0, 0), rules);
+                UrlRulesCaching.SetCache(portalId, portalCacheKey, new TimeSpan(1, 0, 0, 0), rules);
 
 
-            #if DEBUG
-                stopwatch.Stop();
-                mess = $"PortalId: {portalId}. Time elapsed: {stopwatch.Elapsed.Milliseconds}ms. Module Count: {modules.Count()}. PurgedItems: {purgeResult.PurgedItemCount}";
-                Logger.Error(mess);
-                Console.WriteLine(mess);
-            #endif
+                #if DEBUG
+                    stopwatch.Stop();
+                    mess = $"PortalId: {portalId}. Time elapsed: {stopwatch.Elapsed.Milliseconds}ms. Module Count: {modules.Count()}. PurgedItems: {purgeResult.PurgedItemCount}";
+                    Logger.Error(mess);
+                    Console.WriteLine(mess);
+                #endif
 
 
-            return rules;
+                return rules;
             }
         }
     }
