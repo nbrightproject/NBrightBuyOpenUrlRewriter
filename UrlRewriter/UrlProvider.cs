@@ -224,7 +224,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                         }
 
                                     }
-                                    UrlRulesCaching.SetCache(portalId, catCacheKey, new TimeSpan(0, 0, 0, 20), catrules);
+                                    UrlRulesCaching.SetCache(portalId, catCacheKey, new TimeSpan(1, 0, 0, 0), catrules);
                                 }
                             }
                         }
@@ -239,7 +239,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
             #endregion
 
 
-            UrlRulesCaching.SetCache(portalId, portalCacheKey, new TimeSpan(0, 0, 0, 20), rules);
+            UrlRulesCaching.SetCache(portalId, portalCacheKey, new TimeSpan(1, 0, 0, 0), rules);
 
 
             #if DEBUG
