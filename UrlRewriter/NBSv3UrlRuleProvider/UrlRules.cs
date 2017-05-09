@@ -41,7 +41,7 @@ namespace NBright.NBSv3UrlRuleProvider
                 RuleType = UrlRuleType.Module,
                 Parameters = r.Parameters,
                 Action = UrlRuleAction.Rewrite,
-                Url = CleanupUrl(r.Url),
+                Url = r.Url,
                 Patern = r.Patern,
                 RemoveTab = !includePageName
             }).ToList();
