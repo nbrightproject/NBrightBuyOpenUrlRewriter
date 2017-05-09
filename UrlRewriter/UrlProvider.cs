@@ -198,8 +198,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                             if (string.IsNullOrEmpty(produrl)) produrl = prdData.ItemID.ToString("");
                                             //if (catref != "") produrl = catref + "-" + produrl;
                                             //if (catref != "") produrl = catref + "-" + produrl;
-                                            produrl = caturlname + "-" + produrl;
-                                            produrl = Utils.UrlFriendly(produrl);
+                                            produrl = Utils.UrlFriendly(caturlname) + "/" + Utils.UrlFriendly(produrl);
                                             var prodrule = new UrlRule
                                             {
                                                 CultureCode = ruleCultureCode,
