@@ -74,6 +74,8 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                         string cultureCode = key.Value.Code;
                         string ruleCultureCode = (dicLocales.Count > 1 ? cultureCode : null);
 
+                        var grpCatCtrl = new GrpCatController(cultureCode);
+
                         // get all products in portal, with lang data
                         var catitems = objCtrl.GetList(portalId, -1, "CATEGORY");
 
@@ -97,10 +99,9 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                     var SEOName = catDataLang.GetXmlProperty("genxml/textbox/txtseoname");
                                     var categoryName = catDataLang.GetXmlProperty("genxml/textbox/txtcategoryname");
 
-                                    //string url = grpCatCtrl.GetBreadCrumb(catData.ItemID, 0, "-", false);
-                                    var url = caturlname;
-                                    if (string.IsNullOrEmpty(url)) url = SEOName;
-                                    if (string.IsNullOrEmpty(url)) url = categoryName;
+                                    var newcatUrl = grpCatCtrl.GetBreadCrumb(catData.ItemID, 0, "/", false);
+
+                                    var url = newcatUrl;
                                     if (!string.IsNullOrEmpty(url))
                                     {
                                         // ------- Category URL ---------------
@@ -198,7 +199,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                             if (string.IsNullOrEmpty(produrl)) produrl = prdData.ItemID.ToString("");
                                             //if (catref != "") produrl = catref + "-" + produrl;
                                             //if (catref != "") produrl = catref + "-" + produrl;
-                                            produrl = Utils.UrlFriendly(caturlname) + "/" + Utils.UrlFriendly(produrl);
+                                            produrl = newcatUrl + "/" + Utils.UrlFriendly(produrl);
                                             var prodrule = new UrlRule
                                             {
                                                 CultureCode = ruleCultureCode,
@@ -252,6 +253,8 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
             return rules;
             }
         }
+
+
     }
 
     class ProductFake
