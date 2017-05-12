@@ -99,7 +99,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                     var SEOName = catDataLang.GetXmlProperty("genxml/textbox/txtseoname");
                                     var categoryName = catDataLang.GetXmlProperty("genxml/textbox/txtcategoryname");
 
-                                    var newcatUrl = grpCatCtrl.GetBreadCrumb(catData.ItemID, 0, "/", false).Replace(" ", "");
+                                    var newcatUrl = grpCatCtrl.GetBreadCrumb(catData.ItemID, 0, "/", false);
 
                                     var url = newcatUrl;
                                     if (!string.IsNullOrEmpty(url))
