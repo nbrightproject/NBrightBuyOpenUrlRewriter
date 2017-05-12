@@ -41,12 +41,24 @@ namespace NBright.NBSv3UrlRuleProvider
                 RuleType = UrlRuleType.Module,
                 Parameters = r.Parameters,
                 Action = UrlRuleAction.Rewrite,
-                Url = r.Url,
+                Url = CleanUrl(r.Url),
                 Patern = r.Patern,
                 RemoveTab = !includePageName
             }).ToList();
 
 
+        }
+
+        private string CleanUrl(string url)
+        {
+            var urlsplit = url.Split('/');
+            url = "";
+            foreach (var urlseg in urlsplit)
+            {
+                url += CleanupUrl(urlseg) + "/";
+            }
+            url = url.Replace(" ", "").Trim('/');
+            return url;
         }
 
     }

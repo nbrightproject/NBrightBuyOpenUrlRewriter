@@ -99,14 +99,13 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                                     var SEOName = catDataLang.GetXmlProperty("genxml/textbox/txtseoname");
                                     var categoryName = catDataLang.GetXmlProperty("genxml/textbox/txtcategoryname");
 
-                                    var newcatUrl = grpCatCtrl.GetBreadCrumb(catData.ItemID, 0, "/", false);
+                                    var newcatUrl = grpCatCtrl.GetBreadCrumb(catData.ItemID, 0, "/", false).Replace(" ", "");
 
                                     var url = newcatUrl;
                                     if (!string.IsNullOrEmpty(url))
                                     {
                                         // ------- Category URL ---------------
 
-                                        url = NBrightCore.common.Utils.UrlFriendly(url);
                                         var rule = new UrlRule
                                         {
                                             CultureCode = ruleCultureCode,
