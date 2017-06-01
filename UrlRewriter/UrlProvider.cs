@@ -74,7 +74,7 @@ namespace NBright.Providers.NBrightBuyOpenUrlRewriter
                         string cultureCode = key.Value.Code;
                         string ruleCultureCode = (dicLocales.Count > 1 ? cultureCode : null);
 
-                        var grpCatCtrl = new GrpCatController(cultureCode);
+                        var grpCatCtrl = new GrpCatController(cultureCode,portalId);
 
                         // get all products in portal, with lang data
                         var catitems = objCtrl.GetList(portalId, -1, "CATEGORY");

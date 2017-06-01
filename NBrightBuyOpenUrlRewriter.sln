@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBrightBuyOpenUrlRewriter",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBSv3UrlRuleProvider", "UrlRewriter\NBSv3UrlRuleProvider\NBSv3UrlRuleProvider.csproj", "{BC22802C-6B59-4BBE-AB86-1FE0FDD1EC7F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBrightBuy", "..\NBrightBuy\NBrightBuy.csproj", "{8F850303-BEC5-4247-9126-1E58F1402205}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{BC22802C-6B59-4BBE-AB86-1FE0FDD1EC7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC22802C-6B59-4BBE-AB86-1FE0FDD1EC7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC22802C-6B59-4BBE-AB86-1FE0FDD1EC7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F850303-BEC5-4247-9126-1E58F1402205}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F850303-BEC5-4247-9126-1E58F1402205}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F850303-BEC5-4247-9126-1E58F1402205}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F850303-BEC5-4247-9126-1E58F1402205}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
